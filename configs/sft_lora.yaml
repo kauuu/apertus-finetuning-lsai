@@ -1,6 +1,6 @@
 # Model
 model_name_or_path: swiss-ai/Apertus-8B-Instruct-2509
-attn_implementation:  kernels-community/vllm-flash-attn3
+attn_implementation: flash_attention_2 
 dtype: bfloat16
 
 # Dataset
@@ -31,5 +31,5 @@ lr_scheduler_kwargs:
 
 # Output & logging
 output_dir: Apertus-FT/output/apertus_lora
-report_to: "none" 
+report_to: "none"
 seed: 42
