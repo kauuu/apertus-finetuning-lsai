@@ -13,6 +13,9 @@ pip install --upgrade pip
 echo "Installing Flash Attention 2..."
 pip install flash-attn --no-build-isolation
 
+echo "Installing XIELU (CUDA-fused xIELU)..."
+pip install git+https://github.com/nickjbrowning/XIELU
+
 echo "Installing apertus-finetuning requirements..."
 pip install -r requirements.txt
 
