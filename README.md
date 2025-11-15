@@ -1,6 +1,6 @@
 # Introduction
 
-This codebase is an adaptation of [Apertus Finetuning](https://github.com/swiss-ai/apertus-finetuning-recipes) for the Large Scale AI course at ETH Zürich.
+This codebase is an adaptation of [Apertus Finetuning Recipes](https://github.com/swiss-ai/apertus-finetuning-recipes) for the Large Scale AI course at ETH Zürich. Their README is below, and it guides on how to fine-tune the Apertus language models using both full-parameter and LoRA-based approaches.
 
 # Apertus Fine-Tuning Recipes
 
