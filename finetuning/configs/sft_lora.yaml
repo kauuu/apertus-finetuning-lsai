@@ -4,7 +4,7 @@ attn_implementation: flash_attention_2
 dtype: bfloat16
 
 # Dataset
-dataset_name: HuggingFaceH4/Multilingual-Thinking
+dataset_name: ipst/slds
 dataset_num_proc: 12
 
 # Hyperparameters
