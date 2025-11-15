@@ -14,7 +14,8 @@ echo "Installing Flash Attention 2..."
 pip install flash-attn --no-build-isolation
 
 echo "Installing XIELU (CUDA-fused xIELU)..."
-pip install git+https://github.com/nickjbrowning/XIELU
+export CUDA_HOME=/usr/local/cuda
+pip install git+https://github.com/nickjbrowning/XIELU --no-build-isolation --no-deps
 
 echo "Installing apertus-finetuning requirements..."
 pip install -r requirements.txt
