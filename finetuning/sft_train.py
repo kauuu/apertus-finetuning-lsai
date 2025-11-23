@@ -1,28 +1,6 @@
-# Copyright 2020-2025 The HuggingFace Team. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-accelerate launch \
-    --config_file configs/zero3.yaml \
-    sft_train.py \
-    --config configs/sft_lora.yaml \
-    --model_name_or_path swiss-ai/Apertus-8B-Instruct-2509 \
-"""
-
+import os
 from datasets import load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import os
 from trl import (
     ModelConfig,
     ScriptArguments,
@@ -32,49 +10,66 @@ from trl import (
     get_peft_config,
 )
 
-
+from formatting_utils import formatting_prompts_func
 
 def main(script_args, training_args, model_args):
     # ------------------------
-    # Load model & tokenizer
+    # 1. Load model & tokenizer
     # ------------------------
-    #Set base directory to store model
-    store_base_dir = "./" #os.getenv("STORE")
+    store_base_dir = "./"
 
+    # Load Tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_args.model_name_or_path,
+        trust_remote_code=True
+    )
 
+    # Ensure pad token is set
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
+    # Load Model
     model = AutoModelForCausalLM.from_pretrained(
         model_args.model_name_or_path,
         dtype=model_args.dtype,
         use_cache=False if training_args.gradient_checkpointing else True,
-        attn_implementation=model_args.attn_implementation,   # <-- ensure it’s used
+        attn_implementation=model_args.attn_implementation,
+        trust_remote_code=True
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_args.model_name_or_path,
+    # ------------------------
+    # 2. Load dataset
+    # ------------------------
+    # "default" config contains all languages as per dataset card
+    dataset = load_dataset(
+        script_args.dataset_name,
+        name=script_args.dataset_config,
     )
-    tokenizer.pad_token = tokenizer.eos_token
 
-    # --------------
-    # Load dataset
-    # --------------
-    dataset = load_dataset(script_args.dataset_name, name=script_args.dataset_config)
+    dataset = dataset.map(
+        lambda x: formatting_prompts_func(x, tokenizer),
+        batched=True,
+        num_proc=32,
+    )
 
-    # -------------
-    # Train model
-    # -------------
+    # ------------------------
+    # 3. Train model
+    # ------------------------
     trainer = SFTTrainer(
         model=model,
         args=training_args,
         train_dataset=dataset[script_args.dataset_train_split],
-        eval_dataset=dataset[script_args.dataset_test_split]
-        if training_args.eval_strategy != "no"
-        else None,
+        eval_dataset=dataset[script_args.dataset_test_split] if training_args.eval_strategy != "no" else None,
         processing_class=tokenizer,
         peft_config=get_peft_config(model_args),
     )
 
+    # Start training
     trainer.train()
+
+    # Save results
     trainer.save_model(os.path.join(store_base_dir, training_args.output_dir))
+
     if training_args.push_to_hub:
         trainer.push_to_hub(dataset_name=script_args.dataset_name)
 

@@ -44,6 +44,3 @@ FI_CXI_DEFAULT_TX_SIZE = "16384"
 FI_CXI_DISABLE_HOST_REGISTER = "1"
 FI_CXI_RX_MATCH_MODE = "software"
 FI_MR_CACHE_MONITOR = "userfaultfd"
-
-# HuggingFace Cache (use fast scratch storage)
-# HF_HOME is set dynamically by the submit scripts based on $USER

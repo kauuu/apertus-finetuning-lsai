@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --account=large-sc-2
 #SBATCH --job-name=apertus-lora
-#SBATCH --time=02:00:00
+#SBATCH --time=04:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --gpus-per-node=4
+#SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=72
 #SBATCH --mem=460000
 #SBATCH --output=logs/slurm-%x-%j.out
@@ -31,6 +31,9 @@ export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 # Set HuggingFace cache directory
 export HF_HOME="/iopsstor/scratch/cscs/$USER/.cache/huggingface"
 mkdir -p "$HF_HOME"
+
+export TRITON_CACHE_DIR="/iopsstor/scratch/cscs/$USER/.cache/triton"
+mkdir -p "$TRITON_CACHE_DIR"
 
 # Run training with Container Engine (use absolute path to EDF)
 srun --environment="${PROJECT_DIR}/apertus_finetuning.toml" bash -c "
