@@ -1,5 +1,5 @@
-# This uses the image made for evaluation Dockerfile. 
-image = "/iopsstor/scratch/cscs/kkarthikeyan/slds_eval.sqsh"
+# This uses the image made for serving models via vvlm Dockerfile. 
+image = "/iopsstor/scratch/cscs/kkarthikeyan/vllm.sqsh"
 
 # Mount necessary filesystems
 mounts = [

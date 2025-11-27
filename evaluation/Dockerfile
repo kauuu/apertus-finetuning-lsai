@@ -1,18 +1,19 @@
-FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04
+FROM nvcr.io/nvidia/pytorch:24.11-py3
 
-# Install Python and basic tools
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        python3 python3-venv python3-pip ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+# Install OS dependencies
+RUN apt-get update && apt-get install -y git vim curl build-essential && rm -rf /var/lib/apt/lists/*
 
-# Create and activate virtual environment
-RUN python3 -m venv /opt/vllm
-ENV PATH="/opt/vllm/bin:$PATH"
+# Copy requirements
+COPY requirements.txt /tmp/requirements.txt
 
-# Upgrade pip and install vLLM (and its deps) into the venv
-RUN pip install --upgrade pip setuptools wheel
-RUN pip install --no-cache-dir "vllm==0.6.4"
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Upgrade pip and install Python dependencies
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r /tmp/requirements.txt \
+    && pip install --no-cache-dir vllm
 
 # Set working directory
 WORKDIR /workspace
