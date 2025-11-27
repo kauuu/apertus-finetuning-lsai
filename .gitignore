@@ -5,3 +5,6 @@
 *.pyc
 */__pycache__
 */.cache
+finetuning/core_nid006768_178938
+finetuning/wandb/
+evaluation/core_*

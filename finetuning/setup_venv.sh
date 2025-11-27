@@ -2,7 +2,7 @@
 set -e
 
 echo "Creating virtual environment with system site packages..."
-python -m venv --system-site-packages venv-apertus
+python3 -m venv --system-site-packages venv-apertus
 
 echo "Activating virtual environment..."
 source venv-apertus/bin/activate

@@ -64,14 +64,17 @@ def main(script_args, training_args, model_args):
         peft_config=get_peft_config(model_args),
     )
 
+    if training_args.push_to_hub:
+        print(f"Pushing {model_name} to hub!")
+        trainer.push_to_hub(dataset_name=script_args.dataset_name)
+
     # Start training
     trainer.train()
 
     # Save results
     trainer.save_model(os.path.join(store_base_dir, training_args.output_dir))
 
-    if training_args.push_to_hub:
-        trainer.push_to_hub(dataset_name=script_args.dataset_name)
+
 
 
 if __name__ == "__main__":

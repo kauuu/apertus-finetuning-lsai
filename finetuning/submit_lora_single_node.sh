@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=large-sc-2
 #SBATCH --job-name=apertus-lora
-#SBATCH --time=04:00:00
+#SBATCH --time=00:05:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-node=1
@@ -34,11 +34,14 @@ mkdir -p "$HF_HOME"
 
 export TRITON_CACHE_DIR="/iopsstor/scratch/cscs/$USER/.cache/triton"
 mkdir -p "$TRITON_CACHE_DIR"
+export WANDB_API_KEY="0d3c026f963e57e51a98ca9949542dc92a1c2276"
 
 # Run training with Container Engine (use absolute path to EDF)
 srun --environment="${PROJECT_DIR}/apertus_finetuning.toml" bash -c "
     cd ${PROJECT_DIR}
     source venv-apertus/bin/activate
+    pip install datasets
+    pip install -r requirements.txt
     python sft_train.py --config configs/sft_lora.yaml
 "
 

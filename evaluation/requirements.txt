@@ -1,0 +1,5 @@
+emoji>=2.15.0
+lighteval[multilingual]>=0.11.0
+litellm[caching]>=1.79.0
+python-dotenv>=1.2.1
+typer>=0.20.0
