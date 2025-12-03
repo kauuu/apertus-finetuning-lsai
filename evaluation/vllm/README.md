@@ -15,6 +15,5 @@ srun -A large-sc-2 --environment=<path-to-toml-file> -p debug --pty bash
 Once you are on the compute node with the right environment, run the following code to code to start the server with the LoRa finetuned model:
 
 ```zsh
-vllm serve swiss-ai/Apertus-8B-Instruct-2509 --enable-lora \
-> --lora-modules my_finetune=/users/kkarthikeyan/scratch/apertus-finetuning-lsai/finetuning/Apertus-FT/output/apertus_lora_r64_ctx8k/checkpoint-1500
+vllm serve swiss-ai/Apertus-8B-Instruct-2509 --enable-lora --lora-modules "my_finetune=/users/$USER/scratch/apertus-finetuning-lsai/finetuning/Apertus-FT/output/apertus_lora_r64_ctx8k/checkpoint-1500"
 ```
