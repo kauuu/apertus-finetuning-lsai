@@ -1,9 +1,62 @@
 import os
+import sys
 from pathlib import Path
 from textwrap import dedent
-
 import typer
 from dotenv import load_dotenv
+import litellm
+# ==============================================================================
+# 🚨 CRITICAL FIX: SEPARATE SYNC AND ASYNC PATCHES 🚨
+# ==============================================================================
+print("Applying vLLM V1 Crash Fix Patch...")
+
+# 1. Capture BOTH original functions
+_original_acompletion = litellm.acompletion  # The Async version
+_original_completion = litellm.completion    # The Sync version
+
+# 2. Define the cleanup logic (shared)
+def _sanitize_kwargs(kwargs):
+    dangerous_keys = [
+        "response_format", 
+        "guided_json", 
+        "guided_regex", 
+        "guided_choice", 
+        "guided_grammar",
+        "guided_decoding_backend"
+    ]
+    
+    # Check top-level
+    for key in dangerous_keys:
+        if key in kwargs:
+            print(f"DEBUG PATCH: Removing top-level '{key}'")
+            del kwargs[key]
+
+    # Check extra_body
+    if "extra_body" in kwargs and kwargs["extra_body"]:
+        for key in dangerous_keys:
+            if key in kwargs["extra_body"]:
+                print(f"DEBUG PATCH: Removing '{key}' from extra_body")
+                del kwargs["extra_body"][key]
+    return kwargs
+
+# 3. Define the ASYNC wrapper (defined with 'async def')
+async def _patched_acompletion(*args, **kwargs):
+    kwargs = _sanitize_kwargs(kwargs)
+    return await _original_acompletion(*args, **kwargs)
+
+# 4. Define the SYNC wrapper (defined with standard 'def')
+def _patched_completion(*args, **kwargs):
+    kwargs = _sanitize_kwargs(kwargs)
+    return _original_completion(*args, **kwargs)
+
+# 5. Apply them to their respective targets
+litellm.acompletion = _patched_acompletion  # Async -> Async
+litellm.completion = _patched_completion    # Sync  -> Sync
+
+print("Patch Applied Successfully (Sync & Async split).")
+# ==============================================================================
+
+# NOW import lighteval (It will now use the patched litellm)
 from lighteval.logging.evaluation_tracker import EvaluationTracker
 from lighteval.models.endpoints.litellm_model import LiteLLMModelConfig
 from lighteval.models.model_input import GenerationParameters
@@ -86,12 +139,15 @@ def main(
         }
     )
 
+    use_localhost = "hosted_vllm" in model or "openai/" in model
+    
     model_config = LiteLLMModelConfig(
         model_name=model,
-        base_url="http://0.0.0.0:8000/v1" if "hosted_vllm" in model else None,  # Change this if using a different vLLM endpoint
+        # Force localhost if we see 'hosted_vllm' OR if we are using the generic 'openai' prefix for our local model
+        base_url="http://0.0.0.0:8000/v1" if use_localhost else None,
         system_prompt=SLDS_GENERATION_SYSTEM_PROMPT.strip(),
         generation_parameters=generation_config,
-        api_max_retry=999,
+        api_max_retry=10, # 999 is too high, it will hang your terminal forever if it fails
         api_retry_multiplier=1.75,
         api_retry_sleep=1,
     )

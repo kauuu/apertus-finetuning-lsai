@@ -556,7 +556,6 @@ class HeadnoteGenerationTask(LightevalTaskConfig):
 
         super().__init__(
             name=f"{dataset_config.name}:{level_name}",
-            suite=["community"],
             prompt_function=slds_prompt_fn,
             hf_repo="ipst/slds",
             hf_subset=level_name,

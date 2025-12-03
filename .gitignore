@@ -8,3 +8,4 @@
 finetuning/core_nid006768_178938
 finetuning/wandb/
 evaluation/core_*
+merged_model_*
