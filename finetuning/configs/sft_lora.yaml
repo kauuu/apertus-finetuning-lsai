@@ -1,5 +1,5 @@
 # Model
-model_name_or_path: swiss-ai/Apertus-8B-Instruct-2509
+model_name_or_path: swiss-ai/Apertus-70B-Instruct-2509
 attn_implementation: flash_attention_2
 dtype: bfloat16
 
@@ -40,5 +40,5 @@ lr_scheduler_kwargs:
 
 # Output & logging
 output_dir: Apertus-FT/output/apertus_lora_r64_ctx8k
-report_to: "none"
+report_to: "wandb"
 seed: 42
