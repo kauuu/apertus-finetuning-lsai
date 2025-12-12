@@ -35,11 +35,14 @@ SLDS_GENERATION_SYSTEM_PROMPT = dedent(
 @app.command()
 def main(
     model: str = typer.Option(default="/users/mneuwinger/scratch/apertus-finetuning-lsai/evaluation/merged_model", help="Model name or path"),
-        one_shot: bool = typer.Option(default=True, help="Use one-shot prompting, true by default, set to false for trained models."),
-        decision_language: str = typer.Option(default="de,fr,it", help="Language of the decision to summarize (de, fr, it), can be comma-separated for multiple languages. Default is de,fr,it"),
-        headnote_language: str = typer.Option(default="de,fr,it", help="Language of the headnote to generate (de, fr, it), can be comma-separated for multiple languages. Default is de,fr,it"),
-        debug: bool = typer.Option(default=False, help="Debug mode, uses only one sample per language pair")
-    ):
+    one_shot: bool = typer.Option(default=True, help="Use one-shot prompting, true by default, set to false for trained models."),
+    decision_language: str = typer.Option(default="de,fr,it", help="Language of the decision to summarize (de, fr, it), can be comma-separated for multiple languages. Default is de,fr,it"),
+    headnote_language: str = typer.Option(default="de,fr,it", help="Language of the headnote to generate (de, fr, it), can be comma-separated for multiple languages. Default is de,fr,it"),
+    debug: bool = typer.Option(default=False, help="Debug mode, uses only one sample per language pair"),
+    tensor_parallel_size: int = typer.Option(default=1, help="Number of GPUs to shard the model across via tensor parallelism."),
+):
+    if tensor_parallel_size < 1:
+        raise typer.BadParameter("tensor_parallel_size must be >= 1")
 
     known_languages = {"de", "fr", "it"}
     decision_languages = [lang.strip() for lang in decision_language.split(",")]
@@ -106,7 +109,7 @@ def main(
 
     model_config = VLLMModelConfig(
         model_name=model,
-        tensor_parallel_size=1,
+        tensor_parallel_size=tensor_parallel_size,
         data_parallel_size=1,
         pipeline_parallel_size=1,
         gpu_memory_utilization=0.7,
