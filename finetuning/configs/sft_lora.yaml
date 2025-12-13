@@ -39,6 +39,6 @@ lr_scheduler_kwargs:
   min_lr_rate: 0.1
 
 # Output & logging
-output_dir: Apertus-FT/output/apertus_lora_r64_ctx8k
+output_dir: Apertus-FT/output/apertus_70b_lora_r64_ctx8k
 report_to: "wandb"
 seed: 42
