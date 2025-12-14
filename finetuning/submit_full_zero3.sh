@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=large-sc-2
-#SBATCH --job-name=apertus-lora-zero3
+#SBATCH --job-name=apertus-full-zero3
 #SBATCH --time=12:00:00
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=1
@@ -81,7 +81,7 @@ srun --cpu-bind=none --environment="${PROJECT_DIR}/apertus_finetuning.toml" bash
         --num_processes ${WORLD_SIZE} --num_machines ${NUM_NODES} \\
         --machine_rank \${SLURM_PROCID} --main_process_ip ${MASTER_ADDR} \\
         --main_process_port ${MASTER_PORT} \\
-        sft_train.py --config configs/sft_lora.yaml
+        sft_train.py --config configs/sft_full.yaml
 "
 
 echo "=========================================="

@@ -10,6 +10,8 @@ from trl import (
     get_peft_config,
 )
 
+from transformers.trainer_utils import get_last_checkpoint
+
 from formatting_utils import formatting_prompts_func
 
 def main(script_args, training_args, model_args):
@@ -17,6 +19,17 @@ def main(script_args, training_args, model_args):
     # 1. Load model & tokenizer
     # ------------------------
     store_base_dir = "./"
+    # Ensure checkpoint dir exists
+    os.makedirs(training_args.output_dir, exist_ok=True)
+
+    print("\n=== CHECKPOINT CONFIGURATION ===")
+    print("Output dir:", training_args.output_dir)
+    print("Save strategy:", training_args.save_strategy)
+    print("Save steps:", training_args.save_steps)
+    print("Save total limit:", training_args.save_total_limit)
+    print("Save safetensors:", training_args.save_safetensors)
+    print("Resume from checkpoint:", training_args.resume_from_checkpoint)
+    print("================================\n")
 
     # Load Tokenizer
     tokenizer = AutoTokenizer.from_pretrained(
@@ -64,8 +77,12 @@ def main(script_args, training_args, model_args):
         peft_config=get_peft_config(model_args),
     )
 
+    print("Detected last checkpoint:",
+      get_last_checkpoint(training_args.output_dir))
+    print("Resume arg:", training_args.resume_from_checkpoint)
+
     # Start training
-    trainer.train()
+    trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
 
     # Save results
     trainer.save_model(os.path.join(store_base_dir, training_args.output_dir))

@@ -13,7 +13,7 @@ dataset_num_proc: 32
 # Hyperparameters
 learning_rate: 2.0e-4
 gradient_checkpointing: true
-num_train_epochs: 1.0
+num_train_epochs: 4.0
 logging_steps: 1
 
 # BATCH SIZE STRATEGY
@@ -37,6 +37,13 @@ warmup_ratio: 0.03
 lr_scheduler_type: cosine_with_min_lr
 lr_scheduler_kwargs:
   min_lr_rate: 0.1
+
+# Checkpointing:
+save_strategy: steps
+save_steps: 50
+save_total_limit: 2
+save_safetensors: true
+resume_from_checkpoint: true
 
 # Output & logging
 output_dir: Apertus-FT/output/apertus_70b_lora_r64_ctx8k
