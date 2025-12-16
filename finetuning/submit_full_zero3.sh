@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --account=large-sc-2
-#SBATCH --job-name=apertus-full-zero3
+#SBATCH --job-name=apertus-70b-full-zero3
 #SBATCH --time=12:00:00
-#SBATCH --nodes=4
+#SBATCH --nodes=12
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-node=4
 #SBATCH --cpus-per-task=72
@@ -72,6 +72,9 @@ NUM_NODES=${SLURM_NNODES:-1}
 WORLD_SIZE=$((GPUS_PER_NODE * NUM_NODES))
 
 ACCELERATE_CONFIG="configs/zero3_multinode.yaml"
+
+# Fix for memory fragementation
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
 # 4. FIX BINDING: Added --cpu-bind=none to allow Accelerate to manage processes
 srun --cpu-bind=none --environment="${PROJECT_DIR}/apertus_finetuning.toml" bash -c "

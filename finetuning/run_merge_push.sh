@@ -23,13 +23,15 @@ echo "TRITON_CACHE_DIR=$TRITON_CACHE_DIR"
 # Step 1: Merge LoRA model
 # =====================================
 echo "=== Running merge_lora.py ==="
-# python merge_lora.py \
-#     --lora_dir /users/kkarthikeyan/scratch/apertus-finetuning-lsai/finetuning/Apertus-FT/output/apertus_70b_lora_r64_ctx8k/checkpoint-117
+python merge_lora.py \
+    --lora_dir /users/kkarthikeyan/scratch/apertus-finetuning-lsai/finetuning/Apertus-FT/output/apertus_70b_lora_r32_lr5e-5/checkpoint-234
 
 # =====================================
 # Step 2: Push merged model to Hugging Face Hub
 # =====================================
 echo "=== Running push_model.py ==="
-python push_model.py
+python push_model.py \
+  --model-dir /iopsstor/scratch/cscs/kkarthikeyan/apertus-finetuning-lsai/merged_70b_model_r32_5e-5_lr \
+  --repo-id kkaushik02/apertus-70b-instruct-lora-merged_r32_lr5e-5
 
 echo "=== Done! ==="

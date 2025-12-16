@@ -11,9 +11,9 @@ dataset_test_split: validation
 dataset_num_proc: 32
 
 # Hyperparameters
-learning_rate: 2.0e-4
+learning_rate: 5.0e-5
 gradient_checkpointing: true
-num_train_epochs: 4.0
+num_train_epochs: 2.0
 logging_steps: 1
 
 # BATCH SIZE STRATEGY
@@ -22,9 +22,9 @@ gradient_accumulation_steps: 4
 
 # LoRA / PEFT
 use_peft: true
-lora_r: 64
-lora_alpha: 128
-lora_dropout: 0.05
+lora_r: 32
+lora_alpha: 64
+lora_dropout: 0.1
 lora_target_modules: all-linear
 
 # Seq length & scheduler
@@ -46,6 +46,6 @@ save_safetensors: true
 resume_from_checkpoint: true
 
 # Output & logging
-output_dir: Apertus-FT/output/apertus_70b_lora_r64_ctx8k
+output_dir: Apertus-FT/output/apertus_70b_lora_r32_lr5e-5
 report_to: "wandb"
 seed: 42
