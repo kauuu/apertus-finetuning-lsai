@@ -1,0 +1,1557 @@
+{
+  "config_general": {
+    "lighteval_sha": "?",
+    "num_fewshot_seeds": 1,
+    "max_samples": null,
+    "job_id": "0",
+    "start_time": 1106001.202959551,
+    "end_time": 1111929.001264618,
+    "total_evaluation_time_secondes": "5927.798305067001",
+    "model_config": {
+      "model_name": "kkaushik02/apertus-70b-instruct-lora-merged",
+      "generation_parameters": {
+        "num_blocks": null,
+        "block_size": null,
+        "early_stopping": null,
+        "repetition_penalty": 1.05,
+        "frequency_penalty": null,
+        "length_penalty": null,
+        "presence_penalty": null,
+        "max_new_tokens": null,
+        "min_new_tokens": null,
+        "seed": 2025,
+        "stop_tokens": null,
+        "temperature": 0.7,
+        "top_k": 20,
+        "min_p": null,
+        "top_p": 0.8,
+        "truncate_prompt": null,
+        "cache_implementation": null,
+        "response_format": null
+      },
+      "system_prompt": "You are a legal expert specializing in Swiss Federal Supreme Court decisions with extensive knowledge of legal terminology and conventions in German, French, and Italian. Your task is to generate a headnote for a provided leading decision. A headnote is a concise summary that captures the key legal points and significance of the decision. It is not merely a summary of the content but highlights the aspects that make the decision \"leading\" and important for future legislation.\n\nWhen generating the headnote:\n\n1. Focus on the core legal reasoning and key considerations that establish the decision's significance.\n2. Include any relevant references to legal articles (prefixed with \"Art.\") and considerations (prefixed with \"E.\" in German or \"consid.\" in French/Italian).\n3. Use precise legal terminology and adhere to the formal and professional style typical of Swiss Federal Supreme Court headnotes.\n4. Ensure clarity and coherence, so the headnote is logically structured and easy to understand in the specified language.\n\nYour response should consist solely of the headnote in the language specified by the user prompt.",
+      "cache_dir": "~/.cache/huggingface/lighteval",
+      "tokenizer": null,
+      "revision": "main",
+      "dtype": "bfloat16",
+      "tensor_parallel_size": 4,
+      "data_parallel_size": 1,
+      "pipeline_parallel_size": 1,
+      "gpu_memory_utilization": 0.7,
+      "enable_prefix_caching": false,
+      "max_model_length": 8192,
+      "quantization": null,
+      "load_format": null,
+      "swap_space": 8,
+      "seed": 2025,
+      "trust_remote_code": true,
+      "add_special_tokens": true,
+      "multichoice_continuations_start_space": true,
+      "pairwise_tokenization": false,
+      "max_num_seqs": 64,
+      "max_num_batched_tokens": 2048,
+      "subfolder": null,
+      "is_async": false,
+      "override_chat_template": null
+    },
+    "model_name": "kkaushik02/apertus-70b-instruct-lora-merged"
+  },
+  "results": {
+    "slds:it_it|0": {
+      "slds_judge": 10.0,
+      "slds_judge_stderr": 3.4815531191139573,
+      "BERTScore-P": 9.358621388673782,
+      "BERTScore-P_stderr": 11.118309155593336,
+      "BERTScore-R": 5.158388905692846,
+      "BERTScore-R_stderr": 8.329200221020821,
+      "BERTScore-F": 7.25236083380878,
+      "BERTScore-F_stderr": 9.059492369074666,
+      "bleu": 8.191519621389938,
+      "bleu_stderr": 0.06736061552222308,
+      "rouge1": 0.256898698831903,
+      "rouge1_stderr": 0.04878783309988261,
+      "rouge2": 0.11740704538609213,
+      "rouge2_stderr": 0.034210760358149704,
+      "rougeL": 0.14929776866840314,
+      "rougeL_stderr": 0.03138893223885741,
+      "summarization_coverage": 0.7906642849338735,
+      "summarization_coverage_stderr": 0.07253898140490665,
+      "summarization_density": 9.041358215113826,
+      "summarization_density_stderr": 3.880140781034639,
+      "summarization_compression": 32.66400941663653,
+      "summarization_compression_stderr": 2.7250543098979603
+    },
+    "slds:de_de|0": {
+      "slds_judge": 13.23671497584541,
+      "slds_judge_stderr": 1.262166074574703,
+      "BERTScore-P": 4.869516836794246,
+      "BERTScore-P_stderr": 2.730192322270466,
+      "BERTScore-R": 4.222407039470863,
+      "BERTScore-R_stderr": 1.959153316584772,
+      "BERTScore-F": 4.530449302030214,
+      "BERTScore-F_stderr": 2.1344441107989542,
+      "bleu": 7.830296039974082,
+      "bleu_stderr": 0.020662300334520052,
+      "rouge1": 0.2719595195387852,
+      "rouge1_stderr": 0.010115189884421427,
+      "rouge2": 0.11664688582865508,
+      "rouge2_stderr": 0.008221489617952455,
+      "rougeL": 0.18795984430449714,
+      "rougeL_stderr": 0.00866227960637271,
+      "summarization_coverage": 0.8278935675131568,
+      "summarization_coverage_stderr": 0.012052852219985371,
+      "summarization_density": 10.99300650441948,
+      "summarization_density_stderr": 2.235293117123442,
+      "summarization_compression": 41.14932510449475,
+      "summarization_compression_stderr": 5.511569382862277
+    },
+    "slds:de_fr|0": {
+      "slds_judge": 12.46376811594203,
+      "slds_judge_stderr": 1.1866267609336303,
+      "BERTScore-P": 13.576000822308853,
+      "BERTScore-P_stderr": 1.9194866837996107,
+      "BERTScore-R": 9.69877368826779,
+      "BERTScore-R_stderr": 2.292115305116529,
+      "BERTScore-F": 11.6274986782641,
+      "BERTScore-F_stderr": 1.909283532024069,
+      "bleu": 7.133332356997978,
+      "bleu_stderr": 0.01526750153832815,
+      "rouge1": 0.30342049084561756,
+      "rouge1_stderr": 0.01039740700181747,
+      "rouge2": 0.11393611667680664,
+      "rouge2_stderr": 0.005949362767912684,
+      "rougeL": 0.18245337301647221,
+      "rougeL_stderr": 0.006612995824938503,
+      "summarization_coverage": 0.4220152225683557,
+      "summarization_coverage_stderr": 0.012695555894970947,
+      "summarization_density": 1.005526539951368,
+      "summarization_density_stderr": 0.1330065466936367,
+      "summarization_compression": 24.199751658741306,
+      "summarization_compression_stderr": 3.33600200975286
+    },
+    "slds:it_fr|0": {
+      "slds_judge": 15.833333333333334,
+      "slds_judge_stderr": 5.1431527492405085,
+      "BERTScore-P": 2.8360688438018165,
+      "BERTScore-P_stderr": 14.284259786915067,
+      "BERTScore-R": 3.991898316113899,
+      "BERTScore-R_stderr": 8.435433125044895,
+      "BERTScore-F": 3.375675886248549,
+      "BERTScore-F_stderr": 10.471990185162767,
+      "bleu": 8.497000335937237,
+      "bleu_stderr": 0.06799243323724172,
+      "rouge1": 0.2929473802116988,
+      "rouge1_stderr": 0.04962628894435066,
+      "rouge2": 0.12948178593807522,
+      "rouge2_stderr": 0.03013027441284802,
+      "rougeL": 0.16551499199769168,
+      "rougeL_stderr": 0.027723306903548194,
+      "summarization_coverage": 0.47466464960344074,
+      "summarization_coverage_stderr": 0.04430219550910158,
+      "summarization_density": 1.046685511905422,
+      "summarization_density_stderr": 0.1852674347613879,
+      "summarization_compression": 29.562933844029867,
+      "summarization_compression_stderr": 3.317937326558064
+    },
+    "slds:it_de|0": {
+      "slds_judge": 9.166666666666666,
+      "slds_judge_stderr": 3.5798961668820186,
+      "BERTScore-P": 6.014270397524039,
+      "BERTScore-P_stderr": 7.117251116126576,
+      "BERTScore-R": -1.8731112165066104,
+      "BERTScore-R_stderr": 4.63126963045391,
+      "BERTScore-F": 2.0655949910481772,
+      "BERTScore-F_stderr": 4.711917566824771,
+      "bleu": 8.48361740600149,
+      "bleu_stderr": 0.06695480979446748,
+      "rouge1": 0.2570969309532931,
+      "rouge1_stderr": 0.032815756246539464,
+      "rouge2": 0.08780793200276461,
+      "rouge2_stderr": 0.017559487539852488,
+      "rougeL": 0.15207166357680396,
+      "rougeL_stderr": 0.020900178168936124,
+      "summarization_coverage": 0.42578368954218476,
+      "summarization_coverage_stderr": 0.03689397227285781,
+      "summarization_density": 0.7746057852439988,
+      "summarization_density_stderr": 0.08871997335251616,
+      "summarization_compression": 162.3671275724162,
+      "summarization_compression_stderr": 136.59074287252636
+    },
+    "slds:fr_fr|0": {
+      "slds_judge": 19.906542056074766,
+      "slds_judge_stderr": 1.8375927414572155,
+      "BERTScore-P": 24.31608096437494,
+      "BERTScore-P_stderr": 3.372524897844177,
+      "BERTScore-R": 19.332350738276944,
+      "BERTScore-R_stderr": 2.6773909834252136,
+      "BERTScore-F": 21.81250685129628,
+      "BERTScore-F_stderr": 2.7808588096421536,
+      "bleu": 12.456623231314536,
+      "bleu_stderr": 0.03951286161161591,
+      "rouge1": 0.3714461566995839,
+      "rouge1_stderr": 0.014397726402547228,
+      "rouge2": 0.18897746350631275,
+      "rouge2_stderr": 0.011890867057870805,
+      "rougeL": 0.24409378265590892,
+      "rougeL_stderr": 0.01134267511849428,
+      "summarization_coverage": 0.8740022201263212,
+      "summarization_coverage_stderr": 0.016575781392760537,
+      "summarization_density": 7.74207729826888,
+      "summarization_density_stderr": 1.2197311915287772,
+      "summarization_compression": 38.71350143318563,
+      "summarization_compression_stderr": 3.759254762742354
+    },
+    "slds:fr_it|0": {
+      "slds_judge": 15.327102803738319,
+      "slds_judge_stderr": 1.8841315323698682,
+      "BERTScore-P": 15.189075790276037,
+      "BERTScore-P_stderr": 3.5696703047866016,
+      "BERTScore-R": 4.7139653848988985,
+      "BERTScore-R_stderr": 3.251444758167144,
+      "BERTScore-F": 9.949335979872219,
+      "BERTScore-F_stderr": 3.2494000372267653,
+      "bleu": 7.931766259974187,
+      "bleu_stderr": 0.031552741006094995,
+      "rouge1": 0.2627318229282432,
+      "rouge1_stderr": 0.015930509008949077,
+      "rouge2": 0.10960840230372446,
+      "rouge2_stderr": 0.008931964108189801,
+      "rougeL": 0.17484974741586132,
+      "rougeL_stderr": 0.010863829975975679,
+      "summarization_coverage": 0.393023326199001,
+      "summarization_coverage_stderr": 0.014381822437686594,
+      "summarization_density": 2.2760516865889624,
+      "summarization_density_stderr": 1.526945840712363,
+      "summarization_compression": 54.20091629074281,
+      "summarization_compression_stderr": 8.404967130229023
+    },
+    "slds:de_it|0": {
+      "slds_judge": 10.434782608695652,
+      "slds_judge_stderr": 0.9907984987611993,
+      "BERTScore-P": 14.01767146940667,
+      "BERTScore-P_stderr": 2.2690306146933694,
+      "BERTScore-R": 6.510242007915741,
+      "BERTScore-R_stderr": 2.235973889943339,
+      "BERTScore-F": 10.267193124130152,
+      "BERTScore-F_stderr": 2.135264242789048,
+      "bleu": 7.037593832340056,
+      "bleu_stderr": 0.018048032564604896,
+      "rouge1": 0.2551287965842441,
+      "rouge1_stderr": 0.01054963157018572,
+      "rouge2": 0.0929278487605408,
+      "rouge2_stderr": 0.006032950351261135,
+      "rougeL": 0.16828109555475373,
+      "rougeL_stderr": 0.007308716579460974,
+      "summarization_coverage": 0.410628686576205,
+      "summarization_coverage_stderr": 0.014393210717551109,
+      "summarization_density": 3.0863313814067053,
+      "summarization_density_stderr": 1.3263058560887127,
+      "summarization_compression": 33.0228198801652,
+      "summarization_compression_stderr": 3.538432198739823
+    },
+    "slds:fr_de|0": {
+      "slds_judge": 12.336448598130842,
+      "slds_judge_stderr": 1.6294949321647365,
+      "BERTScore-P": 5.497547470590222,
+      "BERTScore-P_stderr": 3.829374513454529,
+      "BERTScore-R": -1.045045084276489,
+      "BERTScore-R_stderr": 2.640708330499327,
+      "BERTScore-F": 2.210205206734555,
+      "BERTScore-F_stderr": 2.95979410472041,
+      "bleu": 7.420660971902344,
+      "bleu_stderr": 0.024878745066506402,
+      "rouge1": 0.2632679341989316,
+      "rouge1_stderr": 0.010837894361088101,
+      "rouge2": 0.09420316147561923,
+      "rouge2_stderr": 0.006898319456165796,
+      "rougeL": 0.17109869475661,
+      "rougeL_stderr": 0.008344586380815401,
+      "summarization_coverage": 0.39527633111089855,
+      "summarization_coverage_stderr": 0.015769453556047672,
+      "summarization_density": 3.3275649971919012,
+      "summarization_density_stderr": 1.7557160089111714,
+      "summarization_compression": 73.32999997454883,
+      "summarization_compression_stderr": 26.65835370363084
+    },
+    "slds:_average|0": {
+      "slds_judge": 13.189484350936334,
+      "slds_judge_stderr": 2.33282361949976,
+      "BERTScore-P": 10.630539331527846,
+      "BERTScore-P_stderr": 5.578899932831526,
+      "BERTScore-R": 5.63442997553932,
+      "BERTScore-R_stderr": 4.0502988400284385,
+      "BERTScore-F": 8.121202317048114,
+      "BERTScore-F_stderr": 4.379160550918178,
+      "bleu": 8.331378895092428,
+      "bleu_stderr": 0.03913667118617808,
+      "rouge1": 0.2816553034213667,
+      "rouge1_stderr": 0.022606470724420194,
+      "rouge2": 0.11677740465317678,
+      "rouge2_stderr": 0.014425052852244765,
+      "rougeL": 0.17729121799411135,
+      "rougeL_stderr": 0.014794166755266585,
+      "summarization_coverage": 0.5571057753526041,
+      "summarization_coverage_stderr": 0.026622647267318698,
+      "summarization_density": 4.365911991121172,
+      "summarization_density_stderr": 1.3723474166896272,
+      "summarization_compression": 54.35670946388458,
+      "summarization_compression_stderr": 21.538034855215507
+    },
+    "all": {
+      "slds_judge": 13.189484350936334,
+      "slds_judge_stderr": 2.3328236194997594,
+      "BERTScore-P": 10.630539331527844,
+      "BERTScore-P_stderr": 5.5788999328315265,
+      "BERTScore-R": 5.63442997553932,
+      "BERTScore-R_stderr": 4.0502988400284385,
+      "BERTScore-F": 8.121202317048112,
+      "BERTScore-F_stderr": 4.379160550918178,
+      "bleu": 8.33137889509243,
+      "bleu_stderr": 0.03913667118617807,
+      "rouge1": 0.2816553034213667,
+      "rouge1_stderr": 0.022606470724420194,
+      "rouge2": 0.11677740465317678,
+      "rouge2_stderr": 0.014425052852244769,
+      "rougeL": 0.17729121799411135,
+      "rougeL_stderr": 0.014794166755266585,
+      "summarization_coverage": 0.5571057753526041,
+      "summarization_coverage_stderr": 0.026622647267318698,
+      "summarization_density": 4.365911991121172,
+      "summarization_density_stderr": 1.3723474166896272,
+      "summarization_compression": 54.35670946388458,
+      "summarization_compression_stderr": 21.538034855215507
+    }
+  },
+  "versions": {},
+  "config_tasks": {
+    "slds:it_it|0": {
+      "name": "slds:it_it",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "it_it",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x4001fb9b1550>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=it, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4001fb9b2ff0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4001fb9b3080>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4001fb9b32f0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=it, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x40059c315be0>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=it)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    },
+    "slds:de_de|0": {
+      "name": "slds:de_de",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "de_de",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x4005602dc470>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=de, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4005602dc140>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4005602dc170>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4005602dc6b0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=de, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x4005602dc200>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=de)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    },
+    "slds:de_fr|0": {
+      "name": "slds:de_fr",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "de_fr",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x4006ab98d0d0>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=fr, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4006ab98d1c0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4006ab98cad0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4006ab98d1f0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=fr, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x4006ab98d220>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=fr)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    },
+    "slds:it_fr|0": {
+      "name": "slds:it_fr",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "it_fr",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x4005602f2210>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=fr, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x40059c193440>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4006b62e3fe0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4006b62e3da0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=fr, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x4006b62e2ff0>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=fr)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    },
+    "slds:it_de|0": {
+      "name": "slds:it_de",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "it_de",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x4005542c6b40>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=de, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4005542c6570>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4006abb887a0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4006abb8aa80>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=de, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x4006abb8ac90>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=de)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    },
+    "slds:fr_fr|0": {
+      "name": "slds:fr_fr",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "fr_fr",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x40059c4c03e0>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=fr, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x40059c4c0b60>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x40059c4c1130>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x40059c4c2ba0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=fr, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x40059c4c1f10>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=fr)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    },
+    "slds:fr_it|0": {
+      "name": "slds:fr_it",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "fr_it",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x40059c840ec0>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=it, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x40059c841bb0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x40059c840b60>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x40059c842330>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=it, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x40059c843f80>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=it)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    },
+    "slds:de_it|0": {
+      "name": "slds:de_it",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "de_it",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x4005bd742a20>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=it, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4005bd742cc0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4005bd742cf0>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x4005bd742c30>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=it, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x4005bd742b10>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=it)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    },
+    "slds:fr_de|0": {
+      "name": "slds:fr_de",
+      "prompt_function": "slds_prompt_fn",
+      "hf_repo": "ipst/slds",
+      "hf_subset": "fr_de",
+      "metrics": [
+        {
+          "metric_name": [
+            "BERTScore-P",
+            "BERTScore-R",
+            "BERTScore-F"
+          ],
+          "higher_is_better": {
+            "BERTScore-P": true,
+            "BERTScore-R": true,
+            "BERTScore-F": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "BertScoreMultilingual(bert_scorer=<lighteval.metrics.imports.bert_scorer.BERTScorer object at 0x400647d1f5c0>, normalize_gold=remove_braces, normalize_pred=remove_braces_and_strip, language=de, model_type=xlm-roberta-large, num_layers=24, device=cuda)",
+          "corpus_level_fn": {
+            "BERTScore-P": "mean",
+            "BERTScore-R": "mean",
+            "BERTScore-F": "mean"
+          },
+          "batched_compute": false
+        },
+        {
+          "metric_name": "bleu",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "GenerativePreparator()",
+          "corpus_level_fn": "CorpusLevelTranslationMetric(metric_type=bleu, lang=)",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge1",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge1'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x400647d1f890>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rouge2",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rouge2'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x400647d1f860>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": "rougeL",
+          "higher_is_better": true,
+          "category": "GENERATIVE",
+          "sample_level_fn": "ROUGE(aggregation_function=mean, methods=['rougeL'], multiple_golds=False, bootstrap=False, normalize_gold=None, normalize_pred=None, tokenizer=None, scorer=<rouge_score.rouge_scorer.RougeScorer object at 0x400647d1f470>)",
+          "corpus_level_fn": "mean",
+          "batched_compute": false
+        },
+        {
+          "metric_name": [
+            "slds_judge"
+          ],
+          "higher_is_better": {
+            "slds_judge": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "JudgeSwissLandmarkDecisionSummarization(language=de, short_judge_name=slds_judge, judge=Model: openai/deepseek/deepseek-v3.2, Judge Backend: litellm, URL: None)",
+          "corpus_level_fn": {
+            "slds_judge": "mean"
+          },
+          "batched_compute": true
+        },
+        {
+          "metric_name": [
+            "summarization_coverage",
+            "summarization_density",
+            "summarization_compression"
+          ],
+          "higher_is_better": {
+            "summarization_coverage": true,
+            "summarization_density": true,
+            "summarization_compression": true
+          },
+          "category": "GENERATIVE",
+          "sample_level_fn": "Extractiveness(stats_metric=<lighteval.metrics.imports.data_stats_metric.DataStatsMetric object at 0x400647d1f7d0>, normalize_input=remove_braces, normalize_pred=remove_braces_and_strip, input_column=text, language=de)",
+          "corpus_level_fn": {
+            "summarization_coverage": "mean",
+            "summarization_density": "mean",
+            "summarization_compression": "mean"
+          },
+          "batched_compute": false
+        }
+      ],
+      "solver": null,
+      "scorer": null,
+      "sample_fields": null,
+      "sample_to_fewshot": null,
+      "filter": null,
+      "hf_revision": null,
+      "hf_filter": "filter_dataset",
+      "hf_avail_splits": [
+        "train",
+        "validation",
+        "test",
+        "one_shot_examples"
+      ],
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": "one_shot_examples",
+      "few_shots_select": "random",
+      "generation_size": 512,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "</s>"
+      ],
+      "num_samples": null,
+      "original_num_docs": -1,
+      "effective_num_docs": -1,
+      "must_remove_duplicate_docs": false,
+      "num_fewshots": 0,
+      "version": 0
+    }
+  },
+  "summary_tasks": {
+    "slds:it_it|0": {
+      "hashes": {
+        "hash_examples": "1283225273f183c5",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "b386ca226c5c7c6f",
+        "hash_cont_tokens": "6f2c064b1828a6aa"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    },
+    "slds:de_de|0": {
+      "hashes": {
+        "hash_examples": "5712a1f521ca0984",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "4b31c3347666af64",
+        "hash_cont_tokens": "a25f27fbc1b734d4"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    },
+    "slds:de_fr|0": {
+      "hashes": {
+        "hash_examples": "2789212d8ee281ea",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "ab8d9d65c56f2f62",
+        "hash_cont_tokens": "74742fac7cfc0d2c"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    },
+    "slds:it_fr|0": {
+      "hashes": {
+        "hash_examples": "738c01fc1ccddbab",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "005710cb28947926",
+        "hash_cont_tokens": "3a137cbb69e21425"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    },
+    "slds:it_de|0": {
+      "hashes": {
+        "hash_examples": "aa127a747078d118",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "f98ac6770246028c",
+        "hash_cont_tokens": "e07232256313d042"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    },
+    "slds:fr_fr|0": {
+      "hashes": {
+        "hash_examples": "df93c7b6eee9775c",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "615da813a6431415",
+        "hash_cont_tokens": "ecfd0e6a270420e4"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    },
+    "slds:fr_it|0": {
+      "hashes": {
+        "hash_examples": "ca4af939c99421ed",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "7fd9b8323b529819",
+        "hash_cont_tokens": "8a5a130f54c97130"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    },
+    "slds:de_it|0": {
+      "hashes": {
+        "hash_examples": "8ae552be61473db8",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "d4f7bfe5fb38b628",
+        "hash_cont_tokens": "9706515ef1e47801"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    },
+    "slds:fr_de|0": {
+      "hashes": {
+        "hash_examples": "82f729c52bea2d22",
+        "hash_full_prompts": "ef46db3751d8e999",
+        "hash_input_tokens": "6ee5c1b121690d00",
+        "hash_cont_tokens": "79c8db4a8e823b15"
+      },
+      "truncated": 0,
+      "non_truncated": 0,
+      "padded": 0,
+      "non_padded": 0
+    }
+  },
+  "summary_general": {
+    "hashes": {
+      "hash_examples": "e31e497cb001a9c8",
+      "hash_full_prompts": "36ab1e8e1061f5c1",
+      "hash_input_tokens": "9d2692393928fc22",
+      "hash_cont_tokens": "5d1a1da41fd35319"
+    },
+    "truncated": 0,
+    "non_truncated": 0,
+    "padded": 0,
+    "non_padded": 0
+  }
+}
