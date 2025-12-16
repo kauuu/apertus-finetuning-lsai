@@ -7,3 +7,5 @@
 */.cache
 */venv-eval/
 */merged_model/
+*/.venv
+*/plots
