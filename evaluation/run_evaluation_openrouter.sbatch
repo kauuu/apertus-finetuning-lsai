@@ -16,7 +16,17 @@ PROJECT_DIR="/users/$USER/apertus-finetuning-lsai/evaluation"
 VENV_DIR="${PROJECT_DIR}/venv-eval"
 
 # MODEL_PATH="${MODEL_PATH:-/users/jmirlach/scratch/apertus-finetuning-lsai/evaluation/merged_model}"
-MODEL_PATH="${MODEL_PATH:-swiss-ai/Apertus-70B-Instruct-2509}"
+# MODEL_PATH="${MODEL_PATH:-swiss-ai/Apertus-70B-Instruct-2509}"
+MODEL_PATH="${MODEL_PATH:-swiss-ai/Apertus-8B-Instruct-2509}"
+
+USE_ONE_SHOT=1  # Set to 1 for one-shot prompting, 0 for zero-shot
+if [[ "$USE_ONE_SHOT" -eq 1 ]]; then
+    ONE_SHOT_FLAG="--one-shot"
+    SHOT_MODE="one-shot"
+else
+    ONE_SHOT_FLAG="--no-one-shot"
+    SHOT_MODE="zero-shot"
+fi
 
 JUDGE_MODEL_ID="${JUDGE_MODEL_ID:-deepseek/deepseek-v3.2}"
 export OPENROUTER_API_KEY="ADD-OPENROUTER-API-KEY"
@@ -49,6 +59,7 @@ srun --environment="${PROJECT_DIR}/evaluation.toml" bash -lc "
     echo '=== Running full evaluation. Judge requests will go to OpenRouter ==='
     echo 'Model under test: ${MODEL_PATH}'
     echo 'Judge model: ${JUDGE_MODEL}'
+    echo 'Prompting mode: ${SHOT_MODE}'
 
     unset SSL_CERT_FILE
 
@@ -59,7 +70,7 @@ srun --environment="${PROJECT_DIR}/evaluation.toml" bash -lc "
         --model ${MODEL_PATH} \
         --decision-language de,fr,it \
         --headnote-language de,fr,it \
-        --no-one-shot \
+        ${ONE_SHOT_FLAG} \
         --tensor-parallel-size ${SLURM_GPUS_ON_NODE:-4}
 
     echo 'Done!'
