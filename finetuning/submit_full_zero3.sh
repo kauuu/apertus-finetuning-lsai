@@ -2,7 +2,7 @@
 #SBATCH --account=large-sc-2
 #SBATCH --job-name=apertus-70b-full-zero3
 #SBATCH --time=12:00:00
-#SBATCH --nodes=12
+#SBATCH --nodes=16
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-node=4
 #SBATCH --cpus-per-task=72

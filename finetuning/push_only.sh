@@ -20,5 +20,6 @@ echo "HF_HOME=$HF_HOME"
 echo "TRITON_CACHE_DIR=$TRITON_CACHE_DIR"
 
 echo "=== Running push_model.py ==="
-python push_model.py
+python push_model.py --model-dir /users/kkarthikeyan/scratch/apertus-finetuning-lsai/finetuning/Apertus-FT/output/apertus_70b_full_zero3/checkpoint-75 \
+  --repo-id kkaushik02/apertus-70b-instruct-fft
 echo "=== Done! ==="

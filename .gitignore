@@ -8,3 +8,4 @@
 */wandb
 finetuning/wandb_*
 merged_*
+finetuning/debug_logs/*

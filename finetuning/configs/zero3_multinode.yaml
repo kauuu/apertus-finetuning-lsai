@@ -2,10 +2,9 @@ compute_environment: LOCAL_MACHINE
 debug: false
 deepspeed_config:
   deepspeed_multinode_launcher: standard
-  gradient_accumulation_steps: 8
+  gradient_accumulation_steps: 4
   gradient_clipping: 1.0
-  offload_optimizer_device: cpu
-  offload_optimizer_pin_memory: true  # speeds up CPU↔GPU transfers
+  offload_optimizer_device: none
   offload_param_device: none  # keep params on GPU for speed
   zero3_init_flag: true
   zero3_save_16bit_model: true
@@ -23,8 +22,8 @@ gpu_ids: all
 machine_rank: 0
 main_training_function: main
 mixed_precision: bf16
-num_machines: 12
-num_processes: 48
+num_machines: 16
+num_processes: 64
 rdzv_backend: static
 same_network: true
 tpu_env: []
