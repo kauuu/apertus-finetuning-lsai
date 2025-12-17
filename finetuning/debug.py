@@ -1,4 +1,5 @@
 import torch
+import argparse
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 from datasets import load_dataset
 from textwrap import dedent
@@ -6,67 +7,206 @@ import os
 from datetime import datetime
 from accelerate import Accelerator
 from math import ceil
+from bert_score import score
+
+# ========================
+# CLI ARGUMENTS
+# ========================
+parser = argparse.ArgumentParser(description="SLDS Headnote Generation (Cross-Lingual Support)")
+
+# Model Configuration
+parser.add_argument(
+    "--model-path", 
+    type=str, 
+    default="swiss-ai/Apertus-8B-Instruct-2509", 
+    help="HuggingFace model path or local directory (default: swiss-ai/Apertus-8B-Instruct-2509)."
+)
+
+# Inference Configuration
+parser.add_argument("--one-shot", action="store_true", help="Enable one-shot prompting using matched language pairs.")
+parser.add_argument("--samples", type=int, default=10, help="Number of test samples to process (default: 10).")
+parser.add_argument("--batch-size", type=int, default=5, help="Batch size for inference (default: 5).")
+
+args = parser.parse_args()
 
 # ========================
 # CONFIGURATION
 # ========================
-MODEL_PATH = "kkaushik02/apertus-8b-instruct-full-finetuned"
+MODEL_PATH = args.model_path 
 DATASET_NAME = "ipst/slds"
-SAMPLE_SIZE = 10        # total number of samples to process
-BATCH_SIZE = 5           # number of samples per batch
-MAX_LENGTH = 512
+MAX_LENGTH = 512              # Max new tokens to generate
 
-# Make directory to store logs
+# Apply other CLI args
+USE_ONE_SHOT = args.one_shot
+SAMPLE_SIZE = args.samples
+BATCH_SIZE = args.batch_size
+
+# Logging setup
 OUTPUT_DIR = "debug_logs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-# Create the file path (using a filename-safe timestamp)
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, f"slds_headnotes_output_{timestamp}.txt")
+mode_label = "1shot" if USE_ONE_SHOT else "0shot"
+# Sanitize model name for filename (replace / with _)
+safe_model_name = MODEL_PATH.replace("/", "_")
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, f"slds_{safe_model_name}_{mode_label}_{timestamp}.txt")
+
+# Language Mapping for Prompting
+LANG_NAME_MAP = {
+    'de': 'German',
+    'fr': 'French',
+    'it': 'Italian',
+    'en': 'English'
+}
 
 # ========================
-# SYSTEM PROMPT
+# PROMPT TEMPLATES
 # ========================
-SLDS_GENERATION_SYSTEM_PROMPT = dedent("""
-You are a legal expert specializing in Swiss Federal Supreme Court decisions with extensive knowledge of legal terminology and conventions in German, French, and Italian. 
-
-Your task is to generate a **headnote** for a provided leading decision. A headnote is a concise summary that captures the key legal points and significance of the decision. It is **not merely a summary**; highlight the aspects that make the decision "leading" and important for future legislation.
+BASE_SYSTEM_PROMPT = dedent("""
+You are a legal expert specializing in Swiss Federal Supreme Court decisions with extensive knowledge of legal terminology and conventions in German, French, and Italian. Your task is to generate a headnote for a provided leading decision. A headnote is a concise summary that captures the key legal points and significance of the decision. It is not merely a summary of the content but highlights the aspects that make the decision "leading" and important for future legislation.
 
 When generating the headnote:
 
-1. Focus on the core **legal reasoning** and key considerations that establish the decision's significance.
-2. Include **any relevant references to legal articles** (prefixed with "Art.") and considerations (prefixed with "E." in German or "consid." in French/Italian).
-3. Use **precise legal terminology** and adhere to the **formal and professional style** typical of Swiss Federal Supreme Court headnotes.
-4. Ensure clarity and coherence; the headnote should be logically structured and easy to understand.
+1. Focus on the core legal reasoning and key considerations that establish the decision's significance.
+2. Include any relevant references to legal articles (prefixed with "Art.") and considerations (prefixed with "E." in German or "consid." in French/Italian).
+3. Use precise legal terminology and adhere to the formal and professional style typical of Swiss Federal Supreme Court headnotes.
+4. Ensure clarity and coherence, so the headnote is logically structured and easy to understand in the specified language.
 
-Output format:
+Your response should consist solely of the headnote in the language specified by the user prompt.
+""")
 
-- The headnote should be in the same language as the decision unless specified otherwise.
-- The output should consist **solely of the headnote**, no extra commentary or explanations.
+ONE_SHOT_TEMPLATE = dedent("""
+Example Decision:
+{example_decision}
 
-Example usage:
+Example Headnote:
+{example_headnote}
+""")
 
-Decision: {{decision_text}}\n
+# UPDATED: Now includes explicit language instruction
+TASK_TEMPLATE = dedent("""
+Decision:
+{target_decision}
+
+Please generate the headnote in {target_language}.
+
 Headnote:
 """)
 
 # ========================
-# LOAD MODEL & TOKENIZER
+# HELPER: GET ONE-SHOT EXAMPLES (CROSS-LINGUAL)
+# ========================
+def prepare_one_shot_examples(dataset_split):
+    """
+    Pre-fetches one example per language pair (Decision Lang -> Headnote Lang).
+    Returns a dictionary keyed by tuple: (decision_language, headnote_language).
+    """
+    shots = {}
+    languages = ['de', 'fr', 'it']
+    
+    # Shuffle once to get random representative examples
+    shuffled = dataset_split.shuffle(seed=42)
+    
+    # Iterate through all possible language combinations (e.g., DE->DE, DE->FR)
+    for dec_lang in languages:
+        for head_lang in languages:
+            try:
+                # Filter for this specific pair
+                subset = shuffled.filter(
+                    lambda x: x.get('decision_language') == dec_lang and x.get('headnote_language') == head_lang, 
+                    load_from_cache_file=False
+                )
+                if len(subset) > 0:
+                    shots[(dec_lang, head_lang)] = subset[0]
+            except Exception:
+                continue
+            
+    # Generic fallback
+    if len(dataset_split) > 0:
+        shots['default'] = dataset_split[0]
+        
+    return shots
+
+def construct_prompt(target_sample, shots):
+    """
+    Builds the prompt. Uses (decision_language, headnote_language) to find the perfect shot.
+    Injects the target language name into the final instruction.
+    """
+    prompt = BASE_SYSTEM_PROMPT
+    
+    # 1. Handle One-Shot Context
+    if USE_ONE_SHOT:
+        d_lang = target_sample.get('decision_language')
+        h_lang = target_sample.get('headnote_language')
+        
+        # Try Exact Pair Match (e.g., DE -> FR)
+        shot = shots.get((d_lang, h_lang))
+        
+        # Fallback: Match Decision Language only
+        if not shot and d_lang:
+            for key in shots:
+                if isinstance(key, tuple) and key[0] == d_lang:
+                    shot = shots[key]
+                    break
+        
+        # Last Resort
+        if not shot:
+            shot = shots.get('default')
+            
+        if shot:
+            prompt += ONE_SHOT_TEMPLATE.format(
+                example_decision=shot['decision'],
+                example_headnote=shot['headnote']
+            )
+    
+    # 2. Resolve Target Language Name
+    target_lang_code = target_sample.get('headnote_language', 'de') # Default to German if missing
+    target_lang_name = LANG_NAME_MAP.get(target_lang_code, "German")
+    
+    # 3. Add the Task with Language Instruction
+    prompt += TASK_TEMPLATE.format(
+        target_decision=target_sample['decision'],
+        target_language=target_lang_name
+    )
+    
+    return prompt
+
+# ========================
+# MAIN EXECUTION
 # ========================
 accelerator = Accelerator()
+
 if accelerator.is_main_process:
-    dataset = load_dataset(DATASET_NAME, split="test")
-    samples = dataset.select(range(SAMPLE_SIZE))
+    print(f"--- Configuration ---")
+    print(f"Model Path: {MODEL_PATH}")
+    print(f"Mode: {'One-Shot' if USE_ONE_SHOT else 'Zero-Shot'}")
+    print(f"Samples: {SAMPLE_SIZE}")
+    print(f"Batch Size: {BATCH_SIZE}")
+    print(f"Output: {OUTPUT_FILE}")
+    print(f"---------------------")
+
+    # 1. Load Data
+    print(f"Loading dataset {DATASET_NAME}...")
+    dataset_test = load_dataset(DATASET_NAME, split="test")
+    dataset_train = load_dataset(DATASET_NAME, split="train")
+    
+    samples = dataset_test.select(range(SAMPLE_SIZE))
+    
+    # Prepare shots
+    shots_map = {}
+    if USE_ONE_SHOT:
+        print("Preparing cross-lingual one-shot examples...")
+        shots_map = prepare_one_shot_examples(dataset_train)
+        print(f"Loaded {len(shots_map)} context examples.")
+        print(f"Pairs found: {[k for k in shots_map.keys() if isinstance(k, tuple)]}")
+
+    # 2. Load Model & Tokenizer
+    print(f"Loading tokenizer from {MODEL_PATH}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-    
-    # FIX 1: Set Padding Side to LEFT for generation
     tokenizer.padding_side = "left" 
-    
-    # Ensure pad token is set (Llama-based models often lack a default pad token)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
         
-    print(f"Loading model {MODEL_PATH} across GPUs...")
+    print(f"Loading model {MODEL_PATH}...")
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_PATH,
         device_map="auto",
@@ -76,70 +216,102 @@ if accelerator.is_main_process:
     
     generation_config = GenerationConfig(
         max_new_tokens=MAX_LENGTH,
-        do_sample=False,
-        temperature=1.0, # Temperature is ignored if do_sample=False, but good practice
+        do_sample=False, 
+        temperature=1.0, 
         pad_token_id=tokenizer.pad_token_id,
         eos_token_id=tokenizer.eos_token_id
     )
 
     # ========================
-    # INFERENCE LOOP IN BATCHES
+    # INFERENCE LOOP
     # ========================
+    print(f"Starting inference...")
+    
     num_batches = ceil(SAMPLE_SIZE / BATCH_SIZE)
     all_headnotes = []
 
     for batch_idx in range(num_batches):
-        batch_indices = list(range(batch_idx*BATCH_SIZE, (batch_idx+1)*BATCH_SIZE))
+        start_idx = batch_idx * BATCH_SIZE
+        end_idx = min((batch_idx + 1) * BATCH_SIZE, SAMPLE_SIZE)
+        batch_indices = range(start_idx, end_idx)
         batch_samples = samples.select(batch_indices)
         
+        # Build Prompts
         input_texts = [
-            SLDS_GENERATION_SYSTEM_PROMPT.replace("{{decision_text}}", s["decision"])
-            for s in batch_samples
+            construct_prompt(s, shots_map) for s in batch_samples
         ]
 
-        # FIX 2: Handle Truncation carefully
-        # Note: If input > model_max_length, "left" removes instructions, "right" removes "Headnote:"
-        # ideally, you should truncate s["decision"] before putting it in the prompt.
-        # For now, we revert to default (right) to ensure instructions are kept, 
-        # but be aware lengthy decisions might lose the "Headnote:" trigger at the end.
-        tokenizer.truncation_side = "right" 
-
+        # Tokenize
+        tokenizer.truncation_side = "right"
         inputs = tokenizer(
             input_texts,
             return_tensors="pt",
             truncation=True,
-            max_length=4096, # Set a safe hard limit if model_max_length is huge
+            max_length=4096, 
             padding=True
         )
         
-        first_device = list(model.hf_device_map.values())[0]
-        inputs = {k: v.to(first_device) for k, v in inputs.items()}
+        inputs = {k: v.to(accelerator.device) for k, v in inputs.items()}
 
+        # Generate
         with torch.no_grad():
             outputs = model.generate(**inputs, generation_config=generation_config)
 
-        # FIX 3: Slice the output to keep ONLY the generated tokens
-        # We calculate the length of the input tokens
+        # Slice Output
         input_length = inputs["input_ids"].shape[1]
-        
-        # We slice the output tensor from [input_length] to the end
         generated_tokens = outputs[:, input_length:]
+        batch_headnotes = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
         
-        # Decode only the new tokens
-        headnotes = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
-        
-        all_headnotes.extend(headnotes)
-        
-        # Optional: Print progress
+        all_headnotes.extend(batch_headnotes)
         print(f"Batch {batch_idx+1}/{num_batches} processed.")
 
     # ========================
-    # SAVE RESULTS
+    # EVALUATION: BERTSCORE
+    # ========================
+    print("Inference complete. Calculating BERTScore...")
+    torch.cuda.empty_cache()
+
+    references = [s['headnote'] for s in samples]
+
+    P, R, F1 = score(
+        all_headnotes, 
+        references, 
+        model_type="bert-base-multilingual-cased", 
+        num_layers=9, 
+        verbose=True,
+        device=accelerator.device 
+    )
+
+    avg_precision = P.mean().item()
+    avg_recall = R.mean().item()
+    avg_f1 = F1.mean().item()
+
+    print(f"Scores -> P: {avg_precision:.4f} | R: {avg_recall:.4f} | F1: {avg_f1:.4f}")
+
+    # ========================
+    # SAVE LOGS
     # ========================
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        f.write(f"SLDS Headnote Generation Log for Model {MODEL_PATH} - {datetime.now()}\n\n")
+        f.write(f"SLDS Generation Log ({'1-SHOT' if USE_ONE_SHOT else '0-SHOT'}) - {datetime.now()}\n")
+        f.write(f"Model: {MODEL_PATH}\n")
+        f.write(f"Context Strategy: Match (Decision Lang -> Headnote Lang)\n\n")
+        
+        f.write("=" * 40 + "\n")
+        f.write("AGGREGATE METRICS (BERTScore)\n")
+        f.write("=" * 40 + "\n")
+        f.write(f"F1 (Avg):        {avg_f1:.4f}\n")
+        f.write(f"Precision (Avg): {avg_precision:.4f}\n")
+        f.write(f"Recall (Avg):    {avg_recall:.4f}\n\n")
+
         for i, sample in enumerate(samples):
             f.write(f"--- Sample {i+1} ---\n")
-            f.write(f"Generated Headnote:\n{all_headnotes[i]}\n\n")
-            f.write(f"Expected Headnote:\n{sample['headnote']}")
-            f.write("-" * 20 + "\n") # Separator
+            d_lang = sample.get('decision_language', 'N/A')
+            h_lang = sample.get('headnote_language', 'N/A')
+            f.write(f"Direction: {d_lang} -> {h_lang}\n")
+            
+            f.write(f"\n[Generated Headnote]:\n{all_headnotes[i]}\n")
+            f.write(f"\n[Expected Headnote]:\n{sample['headnote']}\n")
+            f.write(f"\n> Sample F1 Score: {F1[i].item():.4f}\n")
+            f.write("-" * 40 + "\n")
+
+    print(f"Done. Results saved to {OUTPUT_FILE}")

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=large-sc-2
 #SBATCH --job-name=apertus-70b-debug
-#SBATCH --time=1:00:00
+#SBATCH --time=4:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-node=4
@@ -43,7 +43,8 @@ WORLD_SIZE=$((GPUS_PER_NODE * NUM_NODES))
 srun --cpu-bind=none --environment="${PROJECT_DIR}/apertus_finetuning.toml" bash -c "
     cd ${PROJECT_DIR}
     source venv-apertus/bin/activate
-    python debug.py
+    pip install bert_score
+    python debug.py --one-shot --model-path Qwen/Qwen3-Next-80B-A3B-Instruct
 "
 
 echo "=========================================="
