@@ -7,3 +7,6 @@
 */.cache
 */venv-eval/
 */merged_model/
+*/wandb
+*/.litellm_cache
+/evaluation/results

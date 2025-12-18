@@ -31,3 +31,4 @@
 ## 7) Notes
 - `evaluation.toml` is used by `srun --environment=...` in the sbatch scripts; keep it in sync with the squashfs path.
 - Logs for judge server and generator appear in `logs/eval_*.out|err` (or `_debug_`).
+- `run_evaluation_openrouter.sbatch` runs from a per-job node-local working dir to avoid LiteLLM/diskcache SQLite errors on shared filesystems (`sqlite3.OperationalError: locking protocol`) and writes artifacts to `results/<jobid>_<model>_<shotmode>/`.
