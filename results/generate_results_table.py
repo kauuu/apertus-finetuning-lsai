@@ -17,9 +17,11 @@ from typing import Dict, List
 MODEL_LABELS: Dict[str, str] = {
     # Apertus
     "apertus8b_base": "Apertus 8B",
+    "apertus8b_base_oneshot": "Apertus 8B",
     "apertus8b_full": "Apertus 8B",
     "apertus8b_lora": "Apertus 8B",
     "apertus70b_base": "Apertus 70B",
+    "apertus70b_base_oneshot": "Apertus 70B",
     "apertus70b_full": "Apertus 70B",
     "apertus70b_lora": "Apertus 70B",
     # Non-Apertus
@@ -42,9 +44,11 @@ RUN_ORDER = [
     "qwen7b",
     "qwen14b",
     "apertus8b_base",
+    "apertus8b_base_oneshot",
     "apertus8b_lora",
     "apertus8b_full",
     "apertus70b_base",
+    "apertus70b_base_oneshot",
     "apertus70b_lora",
     "apertus70b_full",
 ]
@@ -108,6 +112,8 @@ def format_metric(entry: Dict, key: str, scale: float = 1.0) -> str:
 
 def variant_from_stem(stem: str) -> str:
     lowered = stem.lower()
+    if "oneshot" in lowered:
+        return "one-shot"
     if "full" in lowered:
         return "Full fine-tuned"
     if "lora" in lowered:
