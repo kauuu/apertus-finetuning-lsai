@@ -434,8 +434,49 @@ def get_swiss_landmark_decision_summarization_judge(
     backend: str = "litellm",
     backend_options: dict | None = None,
 ):
+    def _env_int(name: str) -> int | None:
+        value = os.getenv(name)
+        if value is None:
+            return None
+        value = value.strip()
+        if not value:
+            return None
+        return int(value)
+
+    def _env_bool(name: str) -> bool | None:
+        value = os.getenv(name)
+        if value is None:
+            return None
+        value = value.strip().lower()
+        if value in {"1", "true", "yes", "on"}:
+            return True
+        if value in {"0", "false", "no", "off"}:
+            return False
+        raise ValueError(f"Invalid value for {name}: {value!r}")
+
     if model_name is None:
         model_name = os.environ.get("JUDGE_MODEL", "openai/judge")
+
+    effective_backend_options: dict | None = dict(backend_options or {})
+    try:
+        judge_concurrency = _env_int("SLDS_JUDGE_CONCURRENT_REQUESTS")
+        if judge_concurrency is not None:
+            effective_backend_options.setdefault("concurrent_requests", judge_concurrency)
+    except ValueError as e:
+        logger.warning("%s; ignoring SLDS_JUDGE_CONCURRENT_REQUESTS override", e)
+
+    try:
+        judge_cache = _env_bool("SLDS_JUDGE_CACHE")
+        if judge_cache is not None:
+            effective_backend_options.setdefault("caching", judge_cache)
+    except ValueError as e:
+        logger.warning("%s; ignoring SLDS_JUDGE_CACHE override", e)
+
+    judge_max_tokens: int | None = None
+    try:
+        judge_max_tokens = _env_int("SLDS_JUDGE_MAX_TOKENS")
+    except ValueError as e:
+        logger.warning("%s; ignoring SLDS_JUDGE_MAX_TOKENS override", e)
 
     # Provide conservative defaults so judge calls don't time out under heavy load.
     if backend_options is None:
@@ -446,7 +487,8 @@ def get_swiss_landmark_decision_summarization_judge(
         judge_backend=backend,
         short_judge_name=short_judge_name,
         language=language,
-        backend_options=backend_options,
+        backend_options=effective_backend_options or None,
+        max_tokens=judge_max_tokens,
     )
 
     judge.judge.API_MAX_RETRY = 60

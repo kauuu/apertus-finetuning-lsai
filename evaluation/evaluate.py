@@ -11,7 +11,8 @@ from lighteval.models.model_input import GenerationParameters
 from lighteval.models.vllm.vllm_model import VLLMModelConfig
 from lighteval.pipeline import ParallelismManager, Pipeline, PipelineParameters
 
-load_dotenv()
+_dotenv_path = Path(__file__).with_name(".env")
+load_dotenv(dotenv_path=_dotenv_path if _dotenv_path.exists() else None)
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
@@ -40,6 +41,7 @@ def main(
     headnote_language: str = typer.Option(default="de,fr,it", help="Language of the headnote to generate (de, fr, it), can be comma-separated for multiple languages. Default is de,fr,it"),
     debug: bool = typer.Option(default=False, help="Debug mode, uses only one sample per language pair"),
     tensor_parallel_size: int = typer.Option(default=1, help="Number of GPUs to shard the model across via tensor parallelism."),
+    output_dir: str = typer.Option(default="./results/", help="Directory to write evaluation artifacts to."),
 ):
     if tensor_parallel_size < 1:
         raise typer.BadParameter("tensor_parallel_size must be >= 1")
@@ -77,9 +79,9 @@ def main(
     if debug:
         os.environ["SLDS_DEBUG_JUDGE"] = "1"
 
-    evaluation_tracker = EvaluationTracker(
-        output_dir="./results/",
-    )
+    output_dir_path = Path(output_dir).expanduser()
+    output_dir_path.mkdir(parents=True, exist_ok=True)
+    evaluation_tracker = EvaluationTracker(output_dir=str(output_dir_path))
 
     task_file = Path(__file__).parent / "custom_task" / "slds.py"
 
