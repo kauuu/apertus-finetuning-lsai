@@ -9,3 +9,6 @@
 */merged_model/
 */.venv
 */plots
+*/wandb
+*/.litellm_cache
+/evaluation/results
