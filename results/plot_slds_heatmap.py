@@ -25,6 +25,26 @@ import numpy as np
 import seaborn as sns
 
 
+TIMESLIKE_SERIF = [
+    "Nimbus Roman",
+    "TeX Gyre Termes",
+    "Times New Roman",
+    "Times",
+    "DejaVu Serif",
+    "serif",
+]
+
+# Prefer a Times-like serif font
+plt.rcParams.update(
+    {
+        "font.family": "serif",
+        "font.serif": TIMESLIKE_SERIF,
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+    }
+)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Generate a heatmap of slds_judge scores for language pairs."
@@ -34,7 +54,7 @@ def parse_args() -> argparse.Namespace:
         "-o",
         "--output",
         type=Path,
-        help="Path to save the plot (default: results/plots/<metric>/<json_stem>_<metric>_heatmap.png).",
+        help="Path to save the plot (default: results/plots/<metric>/<json_stem>_<metric>_heatmap.pdf).",
     )
     score_group = parser.add_mutually_exclusive_group()
     score_group.add_argument(
@@ -96,18 +116,48 @@ def load_matrix(
     return matrix, decision_langs, headnote_langs
 
 
+def global_range(json_dir: Path, metric: str) -> Tuple[float, float]:
+    """Compute a global vmin/vmax across all top-level (non-deprecated) JSONs."""
+    vmin = float("inf")
+    vmax = float("-inf")
+    for path in json_dir.glob("*.json"):
+        if "deprecated" in path.parts:
+            continue
+        try:
+            with path.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+            matrix, _, _ = load_matrix(data, metric=metric)
+            if not np.isnan(matrix).all():
+                vmin = min(vmin, np.nanmin(matrix))
+                vmax = max(vmax, np.nanmax(matrix))
+        except Exception:
+            continue
+    if vmin == float("inf") or vmax == float("-inf"):
+        return np.nan, np.nan
+    return vmin, vmax
+
+
 def plot_heatmap(
     matrix: np.ndarray,
     decision_langs: List[str],
     headnote_langs: List[str],
-    title: str,
     metric: str,
     output_path: Path,
+    vmin: float,
+    vmax: float,
 ):
-    sns.set(style="white")
+    sns.set_theme(
+        style="white",
+        rc={
+            "font.family": "serif",
+            "font.serif": TIMESLIKE_SERIF,
+        },
+    )
     fig, ax = plt.subplots(figsize=(5.5, 4.5))
-    vmin = np.nanmin(matrix)
-    vmax = np.nanmax(matrix)
+    # Fallback to local range if global was unavailable
+    if np.isnan(vmin) or np.isnan(vmax):
+        vmin = np.nanmin(matrix)
+        vmax = np.nanmax(matrix)
     cmap = "Blues" if metric.lower().startswith("bert") else "Reds"
     sns.heatmap(
         matrix,
@@ -119,11 +169,14 @@ def plot_heatmap(
         vmin=vmin,
         vmax=vmax,
         cbar_kws={"label": metric},
+        square=True,
+        annot_kws={"size": 12},
         ax=ax,
     )
-    ax.set_xlabel("Headnote Language")
-    ax.set_ylabel("Decision Language")
-    ax.set_title(title)
+    ax.set_xlabel("")
+    ax.set_ylabel("")
+    ax.set_title("")
+    ax.tick_params(axis="both", which="major", labelsize=12)
     fig.tight_layout()
     fig.savefig(output_path, dpi=300)
     print(f"Saved heatmap to {output_path}")
@@ -150,10 +203,23 @@ def main():
         plots_dir = plots_root / metric_dir
         plots_dir.mkdir(parents=True, exist_ok=True)
         sanitized_metric = metric.replace("/", "-")
-        output_path = plots_dir / f"{args.json_path.stem}_{sanitized_metric}_heatmap.png"
+        output_path = plots_dir / f"{args.json_path.stem}_{sanitized_metric}_heatmap.pdf"
+    # Enforce PDF extension unless user explicitly provided another one.
+    if args.output is None and output_path.suffix.lower() != ".pdf":
+        output_path = output_path.with_suffix(".pdf")
 
-    title = args.title or args.json_path.stem
-    plot_heatmap(matrix, decision_langs, headnote_langs, title, metric, output_path)
+    # Compute a global color range across top-level JSONs in the same directory.
+    g_vmin, g_vmax = global_range(args.json_path.parent, metric)
+
+    plot_heatmap(
+        matrix,
+        decision_langs,
+        headnote_langs,
+        metric,
+        output_path,
+        g_vmin,
+        g_vmax,
+    )
 
 
 if __name__ == "__main__":
