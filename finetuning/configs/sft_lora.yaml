@@ -1,5 +1,5 @@
 # Model
-model_name_or_path: swiss-ai/Apertus-70B-Instruct-2509
+model_name_or_path: swiss-ai/Apertus-8B-Instruct-2509
 attn_implementation: flash_attention_2
 dtype: bfloat16
 
@@ -11,7 +11,7 @@ dataset_test_split: validation
 dataset_num_proc: 32
 
 # Hyperparameters
-learning_rate: 5.0e-5
+learning_rate: 2.0e-5
 gradient_checkpointing: true
 num_train_epochs: 2.0
 logging_steps: 1
@@ -43,9 +43,9 @@ save_strategy: steps
 save_steps: 50
 save_total_limit: 2
 save_safetensors: true
-resume_from_checkpoint: true
+resume_from_checkpoint: false
 
 # Output & logging
-output_dir: Apertus-FT/output/apertus_70b_lora_r32_lr5e-5
+output_dir: Apertus-FT/output/apertus_8b_lora_r32_lr2e-5
 report_to: "wandb"
 seed: 42

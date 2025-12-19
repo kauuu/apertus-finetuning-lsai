@@ -14,6 +14,7 @@ from transformers.trainer_utils import get_last_checkpoint
 
 from formatting_utils import formatting_prompts_func
 
+
 def main(script_args, training_args, model_args):
     # ------------------------
     # 1. Load model & tokenizer

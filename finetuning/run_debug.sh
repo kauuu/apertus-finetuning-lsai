@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=large-sc-2
-#SBATCH --job-name=apertus-70b-debug
+#SBATCH --job-name=apertus-debug-output
 #SBATCH --time=4:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -44,8 +44,16 @@ srun --cpu-bind=none --environment="${PROJECT_DIR}/apertus_finetuning.toml" bash
     cd ${PROJECT_DIR}
     source venv-apertus/bin/activate
     pip install bert_score
-    python debug.py --one-shot --model-path Qwen/Qwen3-Next-80B-A3B-Instruct
+    python debug.py --model-path kkaushik02/apertus-70b-instruct-fft --decision-lang it --headnote-lang de --samples 5 --batch-size 5
 "
+
+echo "Possible models: "
+echo "kkaushik02/apertus-70b-instruct-lora-merged_r32_lr5e-5"
+echo "kkaushik02/apertus-70b-instruct-fft"
+echo "kkaushik02/apertus-8b-instruct-full-finetuned"
+echo "kkaushik02/apertus_finetuned_merged_model_r32"
+echo "swiss-ai/Apertus-8B-Instruct-2509"
+echo "swiss-ai/Apertus-70B-Instruct-2509"
 
 echo "=========================================="
 echo "Job finished at: $(date)"
