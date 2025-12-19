@@ -20,6 +20,6 @@ This task is challenging due to its complicated understanding of legal jargon, a
 ## Our codebase explained
 
 - `/finetuning` contains the code needed to submit jobs to finetune models. The config file (`/finetuning/configs`)can be modified to control the hyperparameters, dataset and the model to finetune.
-- `/evaluation` contains the code to run the evaluation of our model on the SLDS dataset. It returns the BERTScore, ROGUE, BLEU and LLM-as-a-Judge scores.
+- `/evaluation` contains the code to run the evaluation of our model on the SLDS dataset. It returns the BERTScore, ROUGE, BLEU and LLM-as-a-Judge scores.
 
 Each of the above two repositories contains the original README, indicating how to run them. 
