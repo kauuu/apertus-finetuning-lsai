@@ -5,7 +5,11 @@
 *.pyc
 */__pycache__
 */.cache
-*/wandb
 finetuning/wandb_*
 merged_*
 finetuning/debug_logs/*
+*/venv-eval/
+*/merged_model/
+*/wandb
+*/.litellm_cache
+/evaluation/results
