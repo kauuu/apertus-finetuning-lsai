@@ -15,149 +15,69 @@ We selected our LoRA configuration based on findings from "LoRA Without Regret" 
     Batch Size (32): To avoid the "large batch penalty" observed in LoRA training dynamics (Schulman et al.), we maintain a moderate effective batch size of 32 rather than scaling up to the hardware limit.
 
 
-# Original README for Apertus Fine-Tuning Recipes
+# Apertus Fine-tuning Guide
 
-This repository provides fine-tuning recipes for Swiss AI’s Apertus language models (8B and 70B), supporting both full-parameter and LoRA-based approaches.
-Built on top of popular frameworks including TRL, Accelerate, and Transformers, the recipes are optimized for efficient training on modern GPUs.
-LoRA fine-tuning of the 8B model can be done on a single 40 GB GPU, while training the 70B model requires a multi-GPU setup.
+## Overview
+This repository provides tools for fine-tuning large language models using both full fine-tuning and LoRA (Low-Rank Adaptation) methods with distributed training support.
 
+## Quick Start
 
-## 🔗 Resources
-- [Apertus 8B Instruct](https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509)  
-- [Apertus 70B Instruct](https://huggingface.co/swiss-ai/Apertus-70B-Instruct-2509)  
-- [Full collection on HF](https://huggingface.co/collections/swiss-ai/apertus-llm-68b699e65415c231ace3b059)  
+### 1. Environment Setup
+```bash
+# Request a compute node with the fine-tuning environment
+srun --environment=/users/$USER/scratch/apertus-finetuning-lsai/finetuning/apertus_finetuning.toml [your resource requirements]
 
----
+# Set up the Python virtual environment
+./setup_venv.sh
 
-## ⚡ Quickstart
+# Exit the compute node after setup
+exit
+```
+
+### 2. Configuration
+
+Modify the configuration files in ./configs/ to set:
+- Hyperparameters (learning rate, batch size, epochs, etc.)
+- Dataset path and preprocessing options
+- Base model selection
+- Training method (LoRA or full fine-tuning)
+
+### 3. Submit Training Jobs
+Choose the appropriate script based on your needs:
+
+| Script | Method | Hardware | Description |
+|--------|--------|----------|-------------|
+| `./submit_full_zero3.sh` | Full fine-tuning | Multi-node | Full parameter training with FSDP (ZeRO-3) |
+| `./submit_lora_single_node.sh` | LoRA | Single node | Parameter-efficient fine-tuning on single node |
+| `./submit_lora_zero3.sh` | LoRA | Multi-node | LoRA with Fully Sharded Data Parallelism |
+
+Example:
+```bash
+sbatch ./submit_lora_single_node.sh
+```
+
+## Post-Training Operations
+
+### Merging LoRA Adapters
+After LoRA training, merge the adapter with the base model (ensure you are on the compute node with the right environment):
 
 ```bash
-# 1. Create and activate environment
-uv venv apertus --python 3.10 && source apertus/bin/activate
+# Set your Hugging Face API token
+export HF_API_TOKEN="your_api_token_here"
 
-# 2. Install PyTorch (CUDA 12.8 wheels)
-uv pip install torch torchvision torchaudio \
-    --index-url https://download.pytorch.org/whl/test/cu128
-
-# 3. Install project requirements
-uv pip install -r requirements.txt
-
-# 4. Launch LoRA training on a single GPU
-python sft_train.py --config configs/sft_lora.yaml
-````
-
----
-
-## Model Selection
-
-All scripts work with both 8B and 70B versions. Switch model size by editing `model_path`:
-
-```python
-# Default: 8B
-model_path = "swiss-ai/Apertus-8B-Instruct-2509"
-
-# To use 70B:
-# model_path = "swiss-ai/Apertus-70B-Instruct-2509"
+# Merge and push to Hugging Face Hub
+./run_merge_push.sh
 ```
 
-Device mapping and configuration are handled automatically.
+### Pushing Full Fine-tuned Models
 
----
-
-## Fine-Tuning
-
-### Full-parameter training (4 GPUs)
+For fully fine-tuned models, push directly to Hugging Face (ensure you are on the compute node with the right environment):
 
 ```bash
-# Standard attention
-accelerate launch --config_file configs/zero3.yaml sft_train.py --config configs/sft_full.yaml
-
-# With FlashAttention3
-accelerate launch --config_file configs/zero3.yaml sft_train.py \
-    --config configs/sft_full.yaml \
-    --attn_implementation kernels-community/vllm-flash-attn3
+export HF_API_TOKEN="your_api_token_here"
+./push_only.sh
 ```
 
-### LoRA training (1 GPU)
+### Debug to look at results
 
-```bash
-python sft_train.py --config configs/sft_lora.yaml
-```
-
----
-
-### Multi-Node training (3 nodes x 4 GPUs)
-
-```bash
-# Standard attention
-bash --nodes=3 submit_multinode.sh
-```
-## Customization
-
-You can adjust datasets and hyperparameters either by editing the config YAMLs (`sft_lora.yaml`, `sft_full.yaml`) or passing overrides directly:
-
-```bash
-accelerate launch --config_file configs/zero3.yaml \
-    sft_train.py --config configs/sft_full.yaml \
-    --dataset_name YOUR_DATASET
-```
-
----
-
-## Model Saving
-
-
-After training completes, your fine-tuned models are saved in the following locations:
-
-- **LoRA Training**: `Apertus-FT/output/apertus_lora/`
-- **Full Fine-tuning**: `Apertus-FT/output/apertus_full/`
-
-Each output directory contains:
-- `adapter_model.safetensors` (LoRA only) - The LoRA adapter weights
-- `adapter_config.json` (LoRA only) - LoRA configuration
-- `training_args.bin` - Training arguments used
-- `trainer_state.json` - Training state and metrics
-- `tokenizer.json`, `tokenizer_config.json` - Tokenizer files
-- `config.json` - Model configuration
-
----
-
-## Using Your Fine-tuned Models
-
-#### For LoRA Adapters
-
-LoRA adapters are lightweight and can be loaded with the base model:
-
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import PeftModel
-
-# Load base model and tokenizer
-base_model = AutoModelForCausalLM.from_pretrained("swiss-ai/Apertus-8B-Instruct-2509")
-tokenizer = AutoTokenizer.from_pretrained("swiss-ai/Apertus-8B-Instruct-2509")
-
-# Load LoRA adapter
-model = PeftModel.from_pretrained(base_model, "Apertus-FT/output/apertus_lora/")
-
-# For inference, you can merge the adapter (optional)
-model = model.merge_and_unload()
-```
-
-#### For Full Fine-tuned Models
-
-Full fine-tuned models can be loaded directly:
-
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# Load your fine-tuned model
-model = AutoModelForCausalLM.from_pretrained("Apertus-FT/output/apertus_full/")
-tokenizer = AutoTokenizer.from_pretrained("Apertus-FT/output/apertus_full/")
-```
-
----
-
-## Contributors
-
-- [Kaustubh Ponkshe](https://kaustubhp11.github.io/)
-- [Raghav Singhal](https://raghavsinghal10.github.io/)
+You can run `sbatch ./run_debug.sh` (modify the params in the `python` command with the bash file accordingly) to run a specific model on SLDS and visualise the output. 
