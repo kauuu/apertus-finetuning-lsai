@@ -61,6 +61,3 @@ export HF_API_TOKEN="your_api_token_here"
 ./push_only.sh
 ```
 
-### Debug to look at results
-
-You can run `sbatch ./run_debug.sh` (modify the params in the `python` command with the bash file accordingly) to run a specific model on SLDS and visualise the output. 
