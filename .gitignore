@@ -10,6 +10,8 @@ merged_*
 finetuning/debug_logs/*
 */venv-eval/
 */merged_model/
+*/.venv
+*/plots
 */wandb
 */.litellm_cache
 /evaluation/results
